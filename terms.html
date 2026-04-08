@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>123RPS Terms of Service</title>
+  <meta name="description" content="Terms of Service for 123RPS." />
+  <style>
+    :root {
+      --bg: #0b0b0d;
+      --card: rgba(255,255,255,0.05);
+      --card-border: rgba(255,255,255,0.08);
+      --text: #ffffff;
+      --muted: #a1a1aa;
+      --accent: #4f46e5;
+      --accent-2: #6366f1;
+      --shadow: 0 20px 50px rgba(0,0,0,0.35);
+      --radius: 24px;
+      --max: 900px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(79,70,229,0.20), transparent 30%),
+        linear-gradient(180deg, #09090b 0%, #0f0f12 100%);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: min(100% - 32px, var(--max));
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(14px);
+      background: rgba(11,11,13,0.72);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .nav-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 72px;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+    }
+
+    .brand-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 10px 30px rgba(79,70,229,0.35);
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    nav a {
+      color: rgba(255,255,255,0.86);
+      font-size: 14px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      transition: 0.2s ease;
+    }
+
+    nav a:hover {
+      background: rgba(255,255,255,0.06);
+      color: #fff;
+    }
+
+    .hero {
+      padding: 84px 0 24px;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.06;
+      letter-spacing: -0.04em;
+      margin: 0 0 12px;
+    }
+
+    .sub {
+      color: var(--muted);
+      max-width: 700px;
+      margin: 0;
+    }
+
+    .card {
+      margin-top: 28px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 30px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h2 {
+      margin-top: 28px;
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+
+    .card h2:first-child {
+      margin-top: 0;
+    }
+
+    .card p, .card li {
+      color: var(--muted);
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    .back {
+      margin-top: 18px;
+      display: inline-flex;
+      padding: 12px 16px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 14px 34px rgba(79,70,229,0.28);
+    }
+
+    footer {
+      padding: 34px 0 48px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (max-width: 640px) {
+      .nav-wrap {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 12px 0;
+      }
+
+      nav {
+        gap: 8px;
+      }
+
+      nav a {
+        padding: 8px 10px;
+      }
+
+      .hero {
+        padding-top: 64px;
+      }
+
+      .card {
+        padding: 22px;
+        border-radius: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container nav-wrap">
+      <a href="index.html" class="brand" aria-label="123RPS Home">
+        <div class="brand-badge">123</div>
+        <span>123RPS</span>
+      </a>
+
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="support.html">Support</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Terms of Service</h1>
+      <p class="sub">Effective date: April 8, 2026</p>
+
+      <div class="card">
+        <h2>Acceptance of Terms</h2>
+        <p>
+          By using 123RPS, you agree to these Terms of Service. If you do not agree,
+          you should not use the app.
+        </p>
+
+        <h2>Use of the App</h2>
+        <p>
+          123RPS is provided for entertainment and gameplay purposes. You agree to use
+          the app lawfully and respectfully.
+        </p>
+
+        <h2>Usernames and Conduct</h2>
+        <ul>
+          <li>You are responsible for any username or public content you choose to use.</li>
+          <li>You agree not to use abusive, offensive, misleading, or inappropriate usernames.</li>
+          <li>We may restrict or remove access for misuse or violations.</li>
+        </ul>
+
+        <h2>Leaderboard and Gameplay Data</h2>
+        <p>
+          Gameplay records, including wins, losses, draws, and usernames, may be displayed
+          as part of public leaderboard features.
+        </p>
+
+        <h2>Availability</h2>
+        <p>
+          We may modify, suspend, or discontinue part or all of the app at any time,
+          with or without notice.
+        </p>
+
+        <h2>No Warranty</h2>
+        <p>
+          123RPS is provided “as is” and “as available” without warranties of any kind,
+          to the fullest extent permitted by law.
+        </p>
+
+        <h2>Limitation of Liability</h2>
+        <p>
+          To the fullest extent permitted by law, we are not liable for indirect, incidental,
+          special, or consequential damages arising from use of the app.
+        </p>
+
+        <h2>Changes to These Terms</h2>
+        <p>
+          These Terms may be updated from time to time. Continued use of the app after updates
+          constitutes acceptance of the revised terms.
+        </p>
+
+        <h2>Contact</h2>
+        <p>
+          If you have questions about these Terms, contact:
+          <strong><a href="mailto:info@123rps.com">info@123rps.com</a></strong>
+        </p>
+
+        <a class="back" href="index.html">Back to Home</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2026 123RPS. All rights reserved.
+  </footer>
+
+</body>
+</html>
