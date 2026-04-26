@@ -372,7 +372,7 @@
 
     .review-list {
       position: relative;
-      min-height: 250px;
+      min-height: 220px;
       overflow: hidden;
       border-radius: 22px;
     }
@@ -389,17 +389,19 @@
     .review-track {
       display: flex;
       flex-direction: row;
-      gap: 16px;
       transition: transform 0.35s ease;
       will-change: transform;
+      width: 100%;
     }
 
     .review-item {
-      min-width: 100%;
-      min-height: 250px;
+      flex: 0 0 100%;
+      max-width: 100%;
+      min-height: 220px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: flex-start;
+      gap: 18px;
       scroll-snap-align: start;
     }
 
@@ -417,7 +419,6 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 12px;
     }
 
     .review-name {
@@ -485,6 +486,12 @@
     .review-nav button:disabled {
       opacity: 0.45;
       cursor: default;
+    }
+
+    .review-cta-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
     }
 
     .review-form-card {
@@ -867,8 +874,9 @@
                 <h3 style="margin-top: 0; margin-bottom: 8px; font-size: 1.35rem;">Add your review</h3>
               </div>
 
-              <div>
+              <div class="review-cta-actions">
                 <a href="#leave-review" class="btn btn-link" id="open-review-modal">Leave a review</a>
+                <a href="reviews.html" class="btn btn-secondary">View all reviews</a>
               </div>
             </div>
           </div>
@@ -996,9 +1004,7 @@
       reviewCarouselMeta.hidden = total <= 1;
 
       if (reviewTrack) {
-        const firstCard = reviewTrack.querySelector(".review-item");
-        const cardWidth = firstCard ? firstCard.offsetWidth + 16 : 0;
-        reviewTrack.style.transform = "translateX(-" + (reviewIndex * cardWidth) + "px)";
+        reviewTrack.style.transform = "translateX(-" + (reviewIndex * 100) + "%)";
       }
 
       Array.from(reviewDots.children).forEach(function(dot, index) {
@@ -1081,11 +1087,11 @@
       localStorage.setItem(storageKey, JSON.stringify(reviews));
     }
 
-    function renderReviews(reviews) {
+    function renderReviews(visibleReviews, allReviews) {
       reviewList.innerHTML = "";
       reviewDots.innerHTML = "";
 
-      if (!reviews.length) {
+      if (!allReviews.length) {
         reviewEmpty.hidden = false;
         reviewsAverage.textContent = "0.0";
         reviewsCount.textContent = "0";
@@ -1095,18 +1101,18 @@
 
       reviewEmpty.hidden = true;
 
-      const total = reviews.reduce(function(sum, review) {
+      const total = allReviews.reduce(function(sum, review) {
         return sum + review.rating;
       }, 0);
 
-      reviewsAverage.textContent = (total / reviews.length).toFixed(1);
-      reviewsCount.textContent = String(reviews.length);
+      reviewsAverage.textContent = (total / allReviews.length).toFixed(1);
+      reviewsCount.textContent = String(allReviews.length);
 
       reviewTrack = document.createElement("div");
       reviewTrack.className = "review-track";
       reviewList.appendChild(reviewTrack);
 
-      reviews.forEach(function(review) {
+      visibleReviews.forEach(function(review) {
         const article = document.createElement("article");
         article.className = "review-item";
 
@@ -1147,35 +1153,35 @@
         dot.className = "review-dot";
         dot.setAttribute("aria-label", "Show review " + (reviewDots.children.length + 1));
         dot.addEventListener("click", function() {
-          goToReview(Array.from(reviewDots.children).indexOf(dot), reviews);
+          goToReview(Array.from(reviewDots.children).indexOf(dot), visibleReviews);
         });
         reviewDots.appendChild(dot);
       });
 
-      updateReviewCarousel(reviews);
+      updateReviewCarousel(visibleReviews);
     }
 
     const submittedReviews = loadSavedReviews();
-    const reviews = starterReviews.concat(submittedReviews);
-    renderReviews(reviews);
+    const allReviews = submittedReviews.concat(starterReviews);
+    renderReviews(allReviews.slice(0, 5), allReviews);
 
     reviewPrevButton.addEventListener("click", function() {
-      goToReview(reviewIndex - 1, reviews);
+      goToReview(reviewIndex - 1, allReviews.slice(0, 5));
     });
 
     reviewNextButton.addEventListener("click", function() {
-      goToReview(reviewIndex + 1, reviews);
+      goToReview(reviewIndex + 1, allReviews.slice(0, 5));
     });
 
     reviewList.addEventListener("wheel", function(event) {
       const dominantDelta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
 
-      if (Math.abs(dominantDelta) < 10 || reviews.length <= 1) {
+      if (Math.abs(dominantDelta) < 10 || allReviews.length <= 1) {
         return;
       }
 
       event.preventDefault();
-      goToReview(reviewIndex + (dominantDelta > 0 ? 1 : -1), reviews);
+      goToReview(reviewIndex + (dominantDelta > 0 ? 1 : -1), allReviews.slice(0, 5));
     }, { passive: false });
 
     let touchStartX = 0;
@@ -1189,11 +1195,11 @@
         return;
       }
 
-      goToReview(reviewIndex + (deltaX > 0 ? 1 : -1), reviews);
+      goToReview(reviewIndex + (deltaX > 0 ? 1 : -1), allReviews.slice(0, 5));
     }, { passive: true });
 
     window.addEventListener("resize", function() {
-      updateReviewCarousel(reviews);
+      updateReviewCarousel(allReviews.slice(0, 5));
     });
 
     openReviewModalButton.addEventListener("click", function(event) {
@@ -1230,9 +1236,11 @@
         return;
       }
 
-      reviews.unshift(review);
-      saveReviews(reviews.slice(starterReviews.length));
-      renderReviews(reviews);
+      submittedReviews.unshift(review);
+      saveReviews(submittedReviews);
+
+      const refreshedReviews = submittedReviews.concat(starterReviews);
+      renderReviews(refreshedReviews.slice(0, 5), refreshedReviews);
       reviewForm.reset();
       document.getElementById("rating-5").checked = true;
       reviewStatus.textContent = "Thanks. Your review is now visible on this page.";
