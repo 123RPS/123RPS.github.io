@@ -371,8 +371,10 @@
     }
 
     .review-list {
-      display: grid;
-      gap: 16px;
+      position: relative;
+      min-height: 250px;
+      overflow: hidden;
+      border-radius: 22px;
     }
 
     .review-item {
@@ -382,6 +384,22 @@
       background: rgba(255,255,255,0.04);
       border: 1px solid rgba(255,255,255,0.08);
       backdrop-filter: blur(10px);
+    }
+
+    .review-track {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: transform 0.35s ease;
+      will-change: transform;
+    }
+
+    .review-item {
+      min-height: 250px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      scroll-snap-align: start;
     }
 
     .review-item::after {
@@ -415,6 +433,57 @@
     .review-body {
       margin: 0;
       color: rgba(255,255,255,0.88);
+    }
+
+    .review-carousel-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .review-dots {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .review-dot {
+      width: 9px;
+      height: 9px;
+      padding: 0;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.22);
+      cursor: pointer;
+      transition: transform 0.18s ease, background 0.18s ease;
+    }
+
+    .review-dot.active {
+      background: var(--gold);
+      transform: scale(1.18);
+    }
+
+    .review-nav {
+      display: flex;
+      gap: 10px;
+    }
+
+    .review-nav button {
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .review-nav button:disabled {
+      opacity: 0.45;
+      cursor: default;
     }
 
     .review-form-card {
@@ -782,6 +851,13 @@
               </div>
 
               <div class="review-list" id="review-list" aria-live="polite"></div>
+              <div class="review-carousel-meta" id="review-carousel-meta">
+                <div class="review-dots" id="review-dots" aria-label="Review carousel pagination"></div>
+                <div class="review-nav">
+                  <button type="button" id="review-prev" aria-label="Previous review">↑</button>
+                  <button type="button" id="review-next" aria-label="Next review">↓</button>
+                </div>
+              </div>
               <p class="review-empty" id="review-empty" hidden>No reviews yet. Be the first to leave one.</p>
             </div>
 
@@ -889,9 +965,54 @@
     const reviewsCount = document.getElementById("reviews-count");
     const reviewForm = document.getElementById("review-form");
     const reviewStatus = document.getElementById("review-status");
+    const reviewDots = document.getElementById("review-dots");
+    const reviewPrevButton = document.getElementById("review-prev");
+    const reviewNextButton = document.getElementById("review-next");
+    const reviewCarouselMeta = document.getElementById("review-carousel-meta");
     const openReviewModalButton = document.getElementById("open-review-modal");
     const closeReviewModalButton = document.getElementById("close-review-modal");
     const reviewModalBackdrop = document.getElementById("review-modal-backdrop");
+    let reviewIndex = 0;
+    let reviewTrack = null;
+
+    function clampReviewIndex(nextIndex, total) {
+      if (total <= 0) {
+        return 0;
+      }
+
+      return Math.max(0, Math.min(nextIndex, total - 1));
+    }
+
+    function updateReviewCarousel(reviews) {
+      const total = reviews.length;
+      reviewIndex = clampReviewIndex(reviewIndex, total);
+
+      if (!total) {
+        reviewCarouselMeta.hidden = true;
+        return;
+      }
+
+      reviewCarouselMeta.hidden = total <= 1;
+
+      if (reviewTrack) {
+        const firstCard = reviewTrack.querySelector(".review-item");
+        const cardHeight = firstCard ? firstCard.offsetHeight + 16 : 0;
+        reviewTrack.style.transform = "translateY(-" + (reviewIndex * cardHeight) + "px)";
+      }
+
+      Array.from(reviewDots.children).forEach(function(dot, index) {
+        dot.classList.toggle("active", index === reviewIndex);
+        dot.setAttribute("aria-current", index === reviewIndex ? "true" : "false");
+      });
+
+      reviewPrevButton.disabled = reviewIndex === 0;
+      reviewNextButton.disabled = reviewIndex === total - 1;
+    }
+
+    function goToReview(nextIndex, reviews) {
+      reviewIndex = clampReviewIndex(nextIndex, reviews.length);
+      updateReviewCarousel(reviews);
+    }
 
     function openReviewModal() {
       reviewModalBackdrop.hidden = false;
@@ -961,11 +1082,13 @@
 
     function renderReviews(reviews) {
       reviewList.innerHTML = "";
+      reviewDots.innerHTML = "";
 
       if (!reviews.length) {
         reviewEmpty.hidden = false;
         reviewsAverage.textContent = "0.0";
         reviewsCount.textContent = "0";
+        reviewCarouselMeta.hidden = true;
         return;
       }
 
@@ -977,6 +1100,10 @@
 
       reviewsAverage.textContent = (total / reviews.length).toFixed(1);
       reviewsCount.textContent = String(reviews.length);
+
+      reviewTrack = document.createElement("div");
+      reviewTrack.className = "review-track";
+      reviewList.appendChild(reviewTrack);
 
       reviews.forEach(function(review) {
         const article = document.createElement("article");
@@ -1012,13 +1139,59 @@
 
         article.appendChild(top);
         article.appendChild(body);
-        reviewList.appendChild(article);
+        reviewTrack.appendChild(article);
+
+        const dot = document.createElement("button");
+        dot.type = "button";
+        dot.className = "review-dot";
+        dot.setAttribute("aria-label", "Show review " + (reviewDots.children.length + 1));
+        dot.addEventListener("click", function() {
+          goToReview(Array.from(reviewDots.children).indexOf(dot), reviews);
+        });
+        reviewDots.appendChild(dot);
       });
+
+      updateReviewCarousel(reviews);
     }
 
     const submittedReviews = loadSavedReviews();
     const reviews = starterReviews.concat(submittedReviews);
     renderReviews(reviews);
+
+    reviewPrevButton.addEventListener("click", function() {
+      goToReview(reviewIndex - 1, reviews);
+    });
+
+    reviewNextButton.addEventListener("click", function() {
+      goToReview(reviewIndex + 1, reviews);
+    });
+
+    reviewList.addEventListener("wheel", function(event) {
+      if (Math.abs(event.deltaY) < 10 || reviews.length <= 1) {
+        return;
+      }
+
+      event.preventDefault();
+      goToReview(reviewIndex + (event.deltaY > 0 ? 1 : -1), reviews);
+    }, { passive: false });
+
+    let touchStartY = 0;
+    reviewList.addEventListener("touchstart", function(event) {
+      touchStartY = event.touches[0].clientY;
+    }, { passive: true });
+
+    reviewList.addEventListener("touchend", function(event) {
+      const deltaY = touchStartY - event.changedTouches[0].clientY;
+      if (Math.abs(deltaY) < 24) {
+        return;
+      }
+
+      goToReview(reviewIndex + (deltaY > 0 ? 1 : -1), reviews);
+    }, { passive: true });
+
+    window.addEventListener("resize", function() {
+      updateReviewCarousel(reviews);
+    });
 
     openReviewModalButton.addEventListener("click", function(event) {
       event.preventDefault();
