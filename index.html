@@ -15,6 +15,8 @@
       --muted: #a1a1aa;
       --accent: #4f46e5;
       --accent-2: #6366f1;
+      --gold: #fbbf24;
+      --gold-soft: rgba(251,191,36,0.18);
       --shadow: 0 20px 50px rgba(0,0,0,0.35);
       --radius: 24px;
       --max: 1120px;
@@ -278,6 +280,318 @@
       padding: 34px;
     }
 
+    .reviews-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .reviews-panel {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top right, rgba(251,191,36,0.16), transparent 32%),
+        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.04));
+    }
+
+    .reviews-panel::before {
+      content: "";
+      position: absolute;
+      inset: auto -50px -50px auto;
+      width: 180px;
+      height: 180px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(79,70,229,0.28), transparent 68%);
+      pointer-events: none;
+    }
+
+    .review-highlight {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 22px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .review-score {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .review-score strong {
+      font-size: clamp(2.2rem, 4vw, 3.6rem);
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+    }
+
+    .review-score-copy p,
+    .review-form-note,
+    .review-empty {
+      color: var(--muted);
+    }
+
+    .review-empty {
+      margin: 0;
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px dashed rgba(255,255,255,0.12);
+      text-align: center;
+    }
+
+    .stars {
+      display: inline-flex;
+      gap: 4px;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+      text-shadow: 0 0 18px rgba(251,191,36,0.22);
+    }
+
+    .stars.small {
+      font-size: 0.95rem;
+    }
+
+    .stars.large {
+      font-size: 1.2rem;
+    }
+
+    .review-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .review-item {
+      position: relative;
+      padding: 20px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(10px);
+    }
+
+    .review-item::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(251,191,36,0.08), transparent 30%);
+      pointer-events: none;
+    }
+
+    .review-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .review-name {
+      font-size: 1.05rem;
+      margin: 0;
+    }
+
+    .review-meta {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin: 0;
+    }
+
+    .review-body {
+      margin: 0;
+      color: rgba(255,255,255,0.88);
+    }
+
+    .review-form-card {
+      background:
+        radial-gradient(circle at top left, rgba(79,70,229,0.18), transparent 35%),
+        linear-gradient(180deg, rgba(17,18,22,0.96), rgba(11,11,13,0.96));
+    }
+
+    .review-cta-card {
+      display: grid;
+      gap: 18px;
+      align-content: start;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top left, rgba(79,70,229,0.2), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(251,191,36,0.12), transparent 30%),
+        linear-gradient(180deg, rgba(17,18,22,0.96), rgba(11,11,13,0.96));
+    }
+
+    .review-cta-copy {
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .review-cta-points {
+      display: grid;
+      gap: 10px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      color: rgba(255,255,255,0.86);
+    }
+
+    .review-cta-points li {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: rgba(5,6,10,0.76);
+      backdrop-filter: blur(14px);
+      z-index: 200;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .review-modal {
+      width: min(100%, 760px);
+      max-height: min(92vh, 900px);
+      overflow: auto;
+      position: relative;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.42);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    .review-form {
+      display: grid;
+      gap: 16px;
+    }
+
+    .review-form label {
+      display: grid;
+      gap: 8px;
+      color: rgba(255,255,255,0.9);
+      font-weight: 600;
+    }
+
+    .review-form input,
+    .review-form textarea,
+    .review-form button {
+      font: inherit;
+    }
+
+    .review-form input,
+    .review-form textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .review-form input:focus,
+    .review-form textarea:focus {
+      border-color: rgba(99,102,241,0.9);
+      box-shadow: 0 0 0 4px rgba(99,102,241,0.16);
+      background: rgba(255,255,255,0.06);
+    }
+
+    .review-form textarea {
+      min-height: 140px;
+      resize: vertical;
+    }
+
+    .rating-picker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .rating-picker input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .rating-picker label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 58px;
+      min-height: 52px;
+      padding: 0 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.82);
+      cursor: pointer;
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+    }
+
+    .rating-picker label:hover {
+      transform: translateY(-2px);
+      border-color: rgba(251,191,36,0.38);
+    }
+
+    .rating-picker input:checked + label {
+      background: linear-gradient(135deg, rgba(251,191,36,0.22), rgba(99,102,241,0.22));
+      border-color: rgba(251,191,36,0.55);
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.24);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .review-form button {
+      width: fit-content;
+      border: 0;
+      cursor: pointer;
+    }
+
+    .review-status {
+      min-height: 1.5em;
+      margin: 0;
+      color: #d4d4d8;
+      font-size: 0.95rem;
+    }
+
     footer {
       padding: 34px 0 48px;
       color: var(--muted);
@@ -292,6 +606,10 @@
 
       .grid {
         grid-template-columns: repeat(2, 1fr);
+      }
+
+      .reviews-shell {
+        grid-template-columns: 1fr;
       }
 
       .phone-card {
@@ -322,6 +640,10 @@
         grid-template-columns: 1fr;
       }
 
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
       .card, .phone-card {
         border-radius: 22px;
       }
@@ -348,6 +670,7 @@
       <nav>
         <a href="index.html">Home</a>
         <a href="#about">About</a>
+        <a href="#reviews">Reviews</a>
         <a href="support.html">Support</a>
         <a href="privacy.html">Privacy</a>
         <a href="terms.html">Terms</a>
@@ -441,6 +764,55 @@
           </ul>
         </div>
 
+        <div class="section" id="reviews">
+          <h2 class="section-title">Player reviews</h2>
+          <p class="section-sub">
+            Real reactions from players who use 123RPS to settle debates, flex on friends,
+            and turn iMessage into a competition.
+          </p>
+
+          <div class="reviews-shell">
+            <div class="card reviews-panel">
+              <div class="review-highlight">
+                <div class="review-score">
+                  <strong id="reviews-average">5.0</strong>
+                  <div class="review-score-copy">
+                    <div class="stars large" aria-hidden="true">★★★★★</div>
+                    <p style="margin: 6px 0 0;">Average rating from the current community board.</p>
+                  </div>
+                </div>
+
+                <div>
+                  <p style="margin: 0; color: var(--muted);">Total reviews</p>
+                  <p id="reviews-count" style="margin: 6px 0 0; font-size: 1.9rem; font-weight: 800; letter-spacing: -0.04em;">3</p>
+                </div>
+              </div>
+
+              <div class="review-list" id="review-list" aria-live="polite"></div>
+              <p class="review-empty" id="review-empty" hidden>No reviews yet. Be the first to leave one.</p>
+            </div>
+
+            <div class="card review-cta-card">
+              <div>
+                <h3 style="margin-top: 0; margin-bottom: 8px; font-size: 1.35rem;">Add your review</h3>
+                <p class="review-cta-copy">
+                  Keep the page focused, then open a quick popup when you want to leave a rating and write-up.
+                </p>
+              </div>
+
+              <ul class="review-cta-points">
+                <li>Choose a star rating out of 5</li>
+                <li>Add a short headline and review text</li>
+                <li>Sign it with your name</li>
+              </ul>
+
+              <div>
+                <button type="button" class="btn btn-primary" id="open-review-modal">Write a review</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="card bottom-cta">
           <h3>Need help?</h3>
           <p style="color: var(--muted); margin-bottom: 18px;">
@@ -455,6 +827,251 @@
   <footer>
     © 2026 123RPS. All rights reserved.
   </footer>
+
+  <div class="modal-backdrop" id="review-modal-backdrop" aria-hidden="true">
+    <div class="card review-form-card review-modal" role="dialog" aria-modal="true" aria-labelledby="review-modal-title">
+      <button type="button" class="modal-close" id="close-review-modal" aria-label="Close review form">×</button>
+      <h3 id="review-modal-title" style="margin-top: 0; margin-bottom: 8px; font-size: 1.5rem;">Leave a review</h3>
+      <p class="review-form-note" style="margin-top: 0; margin-bottom: 20px;">
+        Share your rating, a short write-up, and your name. Reviews added here stay visible on this device.
+      </p>
+
+      <form class="review-form" id="review-form">
+        <div>
+          <span style="display: block; margin-bottom: 10px; font-weight: 600; color: rgba(255,255,255,0.9);">Your rating</span>
+          <div class="rating-picker" role="radiogroup" aria-label="Choose a rating out of 5">
+            <input type="radio" id="rating-5" name="rating" value="5" checked>
+            <label for="rating-5">5 ★</label>
+            <input type="radio" id="rating-4" name="rating" value="4">
+            <label for="rating-4">4 ★</label>
+            <input type="radio" id="rating-3" name="rating" value="3">
+            <label for="rating-3">3 ★</label>
+            <input type="radio" id="rating-2" name="rating" value="2">
+            <label for="rating-2">2 ★</label>
+            <input type="radio" id="rating-1" name="rating" value="1">
+            <label for="rating-1">1 ★</label>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label>
+            Your name
+            <input type="text" name="name" maxlength="40" placeholder="Alex P." required>
+          </label>
+
+          <label>
+            Headline
+            <input type="text" name="title" maxlength="60" placeholder="Perfect for friend rivalries" required>
+          </label>
+        </div>
+
+        <label>
+          Your review
+          <textarea name="body" maxlength="280" placeholder="Fast, simple, and weirdly competitive. Exactly what an iMessage game should be." required></textarea>
+        </label>
+
+        <button type="submit" class="btn btn-primary">Submit review</button>
+        <p class="review-status" id="review-status"></p>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const starterReviews = [
+      {
+        name: "Maya L.",
+        title: "Turns every group chat competitive",
+        body: "This is the fastest way to settle tiny arguments without killing the vibe. The app feels smooth and the results are instant.",
+        rating: 5
+      },
+      {
+        name: "Jordan T.",
+        title: "Simple and addictive",
+        body: "We started using it as a joke and now it is part of our weekly trash talk. Great for quick rematches.",
+        rating: 5
+      },
+      {
+        name: "Chris N.",
+        title: "Exactly what iMessage needed",
+        body: "No tutorial needed. You open it, challenge someone, and immediately know who gets bragging rights.",
+        rating: 5
+      }
+    ];
+
+    const storageKey = "rps-reviews";
+    const reviewList = document.getElementById("review-list");
+    const reviewEmpty = document.getElementById("review-empty");
+    const reviewsAverage = document.getElementById("reviews-average");
+    const reviewsCount = document.getElementById("reviews-count");
+    const reviewForm = document.getElementById("review-form");
+    const reviewStatus = document.getElementById("review-status");
+    const openReviewModalButton = document.getElementById("open-review-modal");
+    const closeReviewModalButton = document.getElementById("close-review-modal");
+    const reviewModalBackdrop = document.getElementById("review-modal-backdrop");
+
+    function openReviewModal() {
+      reviewModalBackdrop.classList.add("open");
+      reviewModalBackdrop.setAttribute("aria-hidden", "false");
+      document.body.classList.add("modal-open");
+
+      window.requestAnimationFrame(function() {
+        const firstField = reviewForm.querySelector('input[name="name"]');
+        if (firstField) {
+          firstField.focus();
+        }
+      });
+    }
+
+    function closeReviewModal() {
+      reviewModalBackdrop.classList.remove("open");
+      reviewModalBackdrop.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("modal-open");
+      openReviewModalButton.focus();
+    }
+
+    function starMarkup(rating) {
+      return "★".repeat(rating) + "☆".repeat(5 - rating);
+    }
+
+    function sanitizeReview(rawReview) {
+      const rating = Math.min(5, Math.max(1, Number(rawReview.rating) || 5));
+
+      return {
+        name: String(rawReview.name || "Anonymous").trim().slice(0, 40),
+        title: String(rawReview.title || "New review").trim().slice(0, 60),
+        body: String(rawReview.body || "").trim().slice(0, 280),
+        rating: rating
+      };
+    }
+
+    function loadSavedReviews() {
+      try {
+        const stored = localStorage.getItem(storageKey);
+        if (!stored) {
+          return [];
+        }
+
+        const parsed = JSON.parse(stored);
+        if (!Array.isArray(parsed)) {
+          return [];
+        }
+
+        return parsed.map(sanitizeReview).filter(function(review) {
+          return review.name && review.title && review.body;
+        });
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function saveReviews(reviews) {
+      localStorage.setItem(storageKey, JSON.stringify(reviews));
+    }
+
+    function renderReviews(reviews) {
+      reviewList.innerHTML = "";
+
+      if (!reviews.length) {
+        reviewEmpty.hidden = false;
+        reviewsAverage.textContent = "0.0";
+        reviewsCount.textContent = "0";
+        return;
+      }
+
+      reviewEmpty.hidden = true;
+
+      const total = reviews.reduce(function(sum, review) {
+        return sum + review.rating;
+      }, 0);
+
+      reviewsAverage.textContent = (total / reviews.length).toFixed(1);
+      reviewsCount.textContent = String(reviews.length);
+
+      reviews.forEach(function(review) {
+        const article = document.createElement("article");
+        article.className = "review-item";
+
+        const top = document.createElement("div");
+        top.className = "review-top";
+
+        const identity = document.createElement("div");
+
+        const title = document.createElement("h3");
+        title.className = "review-name";
+        title.textContent = review.title;
+
+        const meta = document.createElement("p");
+        meta.className = "review-meta";
+        meta.textContent = "by " + review.name;
+
+        identity.appendChild(title);
+        identity.appendChild(meta);
+
+        const stars = document.createElement("div");
+        stars.className = "stars small";
+        stars.setAttribute("aria-label", review.rating + " out of 5 stars");
+        stars.textContent = starMarkup(review.rating);
+
+        top.appendChild(identity);
+        top.appendChild(stars);
+
+        const body = document.createElement("p");
+        body.className = "review-body";
+        body.textContent = review.body;
+
+        article.appendChild(top);
+        article.appendChild(body);
+        reviewList.appendChild(article);
+      });
+    }
+
+    const submittedReviews = loadSavedReviews();
+    const reviews = starterReviews.concat(submittedReviews);
+    renderReviews(reviews);
+
+    openReviewModalButton.addEventListener("click", openReviewModal);
+    closeReviewModalButton.addEventListener("click", closeReviewModal);
+
+    reviewModalBackdrop.addEventListener("click", function(event) {
+      if (event.target === reviewModalBackdrop) {
+        closeReviewModal();
+      }
+    });
+
+    document.addEventListener("keydown", function(event) {
+      if (event.key === "Escape" && reviewModalBackdrop.classList.contains("open")) {
+        closeReviewModal();
+      }
+    });
+
+    reviewForm.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const formData = new FormData(reviewForm);
+      const review = sanitizeReview({
+        rating: formData.get("rating"),
+        name: formData.get("name"),
+        title: formData.get("title"),
+        body: formData.get("body")
+      });
+
+      if (!review.name || !review.title || !review.body) {
+        reviewStatus.textContent = "Please complete your name, headline, and review before submitting.";
+        return;
+      }
+
+      reviews.unshift(review);
+      saveReviews(reviews.slice(starterReviews.length));
+      renderReviews(reviews);
+      reviewForm.reset();
+      document.getElementById("rating-5").checked = true;
+      reviewStatus.textContent = "Thanks. Your review is now visible on this page.";
+
+      window.setTimeout(function() {
+        closeReviewModal();
+      }, 250);
+    });
+  </script>
 
 </body>
 </html>
