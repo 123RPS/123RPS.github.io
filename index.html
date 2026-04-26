@@ -425,34 +425,13 @@
 
     .review-cta-card {
       display: grid;
-      gap: 18px;
+      gap: 20px;
       align-content: start;
       min-height: 100%;
       background:
         radial-gradient(circle at top left, rgba(79,70,229,0.2), transparent 35%),
         radial-gradient(circle at bottom right, rgba(251,191,36,0.12), transparent 30%),
         linear-gradient(180deg, rgba(17,18,22,0.96), rgba(11,11,13,0.96));
-    }
-
-    .review-cta-copy {
-      color: var(--muted);
-      margin: 0;
-    }
-
-    .review-cta-points {
-      display: grid;
-      gap: 10px;
-      padding: 0;
-      margin: 0;
-      list-style: none;
-      color: rgba(255,255,255,0.86);
-    }
-
-    .review-cta-points li {
-      padding: 12px 14px;
-      border-radius: 16px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
     }
 
     .modal-backdrop {
@@ -809,16 +788,7 @@
             <div class="card review-cta-card">
               <div>
                 <h3 style="margin-top: 0; margin-bottom: 8px; font-size: 1.35rem;">Add your review</h3>
-                <p class="review-cta-copy">
-                  Keep the page focused, then open a quick popup when you want to leave a rating and write-up.
-                </p>
               </div>
-
-              <ul class="review-cta-points">
-                <li>Choose a star rating out of 5</li>
-                <li>Add a short headline and review text</li>
-                <li>Sign it with your name</li>
-              </ul>
 
               <div>
                 <a href="#leave-review" class="btn btn-link" id="open-review-modal">Leave a review</a>
