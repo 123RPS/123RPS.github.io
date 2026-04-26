@@ -945,28 +945,8 @@
     </div>
   </div>
 
+  <script src="reviews-data.js"></script>
   <script>
-    const starterReviews = [
-      {
-        name: "Maya L.",
-        title: "Smoothest way to settle it in iMessage",
-        body: "123RPS feels incredibly smooth inside iMessage. It works perfectly, is easy to use, and settles little disputes in seconds without slowing the conversation down.",
-        rating: 5
-      },
-      {
-        name: "Jordan T.",
-        title: "Fast, simple, and always works",
-        body: "The whole experience is polished and easy to use. We use it in iMessage all the time because it works perfectly and makes settling debates way more fun.",
-        rating: 5
-      },
-      {
-        name: "Chris N.",
-        title: "Perfect for quick dispute settling",
-        body: "Exactly what an iMessage game should be. It is smooth, straightforward, and makes it ridiculously easy to settle disputes and keep moving.",
-        rating: 5
-      }
-    ];
-
     const storageKey = "rps-reviews";
     const reviewList = document.getElementById("review-list");
     const reviewEmpty = document.getElementById("review-empty");
@@ -1061,6 +1041,16 @@
         body: String(rawReview.body || "").trim().slice(0, 280),
         rating: rating
       };
+    }
+
+    function loadStarterReviews() {
+      if (!Array.isArray(window.RPSStarterReviews)) {
+        return [];
+      }
+
+      return window.RPSStarterReviews.map(sanitizeReview).filter(function(review) {
+        return review.name && review.title && review.body;
+      });
     }
 
     function loadSavedReviews() {
@@ -1161,6 +1151,7 @@
       updateReviewCarousel(visibleReviews);
     }
 
+    const starterReviews = loadStarterReviews();
     const submittedReviews = loadSavedReviews();
     const allReviews = submittedReviews.concat(starterReviews);
     renderReviews(allReviews.slice(0, 5), allReviews);
