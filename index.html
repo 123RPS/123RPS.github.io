@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>123RPS</title>
   <meta name="description" content="123RPS brings Rock Paper Scissors to iMessage. Challenge friends, track wins, and settle anything." />
+  <link rel="icon" type="image/png" href="assets/123rps-logo.png" />
+  <link rel="apple-touch-icon" href="assets/123rps-logo.png" />
+  <meta property="og:image" content="assets/123rps-logo.png" />
+  <meta name="twitter:image" content="assets/123rps-logo.png" />
   <style>
     :root {
       --bg: #0b0b0d;
@@ -77,13 +81,32 @@
     .brand-badge {
       width: 40px;
       height: 40px;
+      position: relative;
+      overflow: hidden;
       border-radius: 12px;
       display: grid;
       place-items: center;
       background: linear-gradient(135deg, var(--accent), var(--accent-2));
       box-shadow: 0 10px 30px rgba(79,70,229,0.35);
+      color: transparent;
+    }
+
+    .brand-badge img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .brand-badge-fallback {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: #fff;
       font-weight: 800;
       font-size: 13px;
+      opacity: 0;
     }
 
     nav {
@@ -252,8 +275,26 @@
       z-index: 1;
     }
 
-    .result-bubble h3 {
-      margin: 0 0 8px;
+    .result-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .result-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      object-fit: cover;
+      display: block;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.10);
+      flex: none;
+    }
+
+    .result-head h3 {
+      margin: 0;
       font-size: clamp(1.5rem, 3.5vw, 2.05rem);
       line-height: 1.1;
       letter-spacing: -0.02em;
@@ -811,7 +852,10 @@
   <header>
     <div class="container nav-wrap">
       <a href="index.html" class="brand" aria-label="123RPS Home">
-        <div class="brand-badge">123</div>
+        <div class="brand-badge">
+          <img src="assets/123rps-logo.png" alt="123RPS logo" onerror="this.style.display='none'; this.nextElementSibling.style.opacity='1';">
+          <span class="brand-badge-fallback">123</span>
+        </div>
         <span>123RPS</span>
       </a>
 
@@ -863,7 +907,10 @@
             </div>
 
             <div class="result-bubble">
-              <h3>123RPS Result</h3>
+              <div class="result-head">
+                <img class="result-logo" src="assets/123rps-logo.png" alt="123RPS app icon" onerror="this.style.display='none';">
+                <h3>123RPS Result</h3>
+              </div>
               <p>andrew1: 📄 P<br>Cameron1: 📄 P</p>
               <strong>🤝 Draw</strong>
             </div>
